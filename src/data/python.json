@@ -1,0 +1,5 @@
+{
+  "name": "Python Roadmap",
+  "category": "python",
+  "nodes": ["python-root", "python-basics", "python-variables", "python-functions", "python-closures", "python-decorators", "python-context-managers", "python-oop", "python-async"]
+}

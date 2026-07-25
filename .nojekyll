@@ -1,0 +1,7 @@
+# Exclude from Jekyll processing (GitHub Pages)
+node_modules/
+src/
+
+# Serve the built app
+/*
+!dist/

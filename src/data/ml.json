@@ -1,0 +1,5 @@
+{
+  "name": "Machine Learning Roadmap",
+  "category": "ml",
+  "nodes": ["ml-root", "ml-supervised", "ml-unsupervised"]
+}
