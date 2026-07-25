@@ -22,4 +22,8 @@ dist-ssr
 
 # Environment
 .env
-.env.*
+.env.local
+.env.*.local
+# .env.production is intentionally tracked — it only sets the public
+# VITE_READONLY flag that makes the deployed site view-only, no secrets.
+!.env.production
