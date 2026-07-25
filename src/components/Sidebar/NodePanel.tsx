@@ -192,27 +192,79 @@ export default function NodePanel() {
           </section>
 
           {/* Description */}
-          {node.description && (
+          {(node.description || canEdit) && (
             <section>
               <p className="section-title mb-2">Description</p>
-              <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
-                {node.description}
-              </p>
+              {canEdit ? (
+                <textarea
+                  key={node.id}
+                  defaultValue={node.description}
+                  placeholder="What is this topic about?"
+                  rows={3}
+                  onBlur={(e) => {
+                    const value = e.target.value.trim();
+                    if (value !== node.description) {
+                      updateNode(node.id, { description: value });
+                    }
+                  }}
+                  className="input-field w-full resize-none text-sm leading-relaxed"
+                />
+              ) : (
+                <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
+                  {node.description}
+                </p>
+              )}
             </section>
           )}
 
           {/* Key Learnings */}
-          {node.keyLearnings.length > 0 && (
+          {(node.keyLearnings.length > 0 || canEdit) && (
             <section>
               <p className="section-title mb-2">Key Learnings</p>
               <ul className="space-y-1">
                 {node.keyLearnings.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
+                  <li key={i} className="group flex items-start gap-2 text-sm">
                     <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                    {item}
+                    <span className="min-w-0 flex-1">{item}</span>
+                    {canEdit && (
+                      <button
+                        onClick={() =>
+                          updateNode(node.id, {
+                            keyLearnings: node.keyLearnings.filter((_, idx) => idx !== i),
+                          })
+                        }
+                        className="shrink-0 text-red-500 opacity-0 group-hover:opacity-100"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
+              {canEdit && (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const form = e.target as HTMLFormElement;
+                    const input = form.elements.namedItem('keyLearning') as HTMLInputElement;
+                    const value = input.value.trim();
+                    if (value) {
+                      updateNode(node.id, { keyLearnings: [...node.keyLearnings, value] });
+                      form.reset();
+                    }
+                  }}
+                  className="mt-2 flex gap-2"
+                >
+                  <input
+                    name="keyLearning"
+                    placeholder="Add a key learning..."
+                    className="input-field flex-1 text-sm"
+                  />
+                  <button type="submit" className="btn-primary !px-2">
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </form>
+              )}
             </section>
           )}
 
