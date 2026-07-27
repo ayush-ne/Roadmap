@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
+import { isReadOnlyBuild } from '@/utils/env';
 import type {
   TopicNode,
   Category,
@@ -137,6 +138,19 @@ function migrateNode(raw: TopicNode & { isProject?: boolean }): TopicNode {
 function migrateNodes(nodes: TopicNode[]): TopicNode[] {
   return nodes.map(migrateNode);
 }
+
+// On the published, read-only GitHub Pages build there is no "your" data to
+// persist — everyone should always see exactly what's baked into
+// initial-data.json for that deploy. Without this, a browser that visited an
+// earlier deploy would keep rehydrating its own old localStorage snapshot
+// forever, silently masking every future update (same bug even for the
+// developer testing in their own browser). The read-only build gets a
+// no-op storage instead, so persist has nothing to read or write.
+const noopStorage: StateStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
 
 function initFromData() {
   const nodes = migrateNodes(initialData.nodes as unknown as TopicNode[]);
@@ -721,6 +735,9 @@ export const useStore = create<AppState>()(
     {
       name: 'knowledge-graph-storage',
       version: 1,
+      storage: isReadOnlyBuild
+        ? createJSONStorage(() => noopStorage)
+        : createJSONStorage(() => localStorage),
       migrate: (persistedState, version) => {
         const state = persistedState as { nodes?: TopicNode[] } & Record<string, unknown>;
         if (version < 1 && Array.isArray(state?.nodes)) {
