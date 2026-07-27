@@ -13,7 +13,9 @@ import {
 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { ACCENT_COLORS } from '@/types';
+import type { TopicNode, Category, GraphEdge } from '@/types';
 import { isReadOnlyBuild } from '@/utils/env';
+import exampleData from '@/data/example-data.json';
 import {
   exportToJSON,
   exportToMarkdown,
@@ -34,6 +36,21 @@ export default function SettingsPage() {
   const resetToDefault = useStore((s) => s.resetToDefault);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
+
+  const handleLoadExample = () => {
+    if (
+      confirm(
+        'Load the example data set? This replaces everything currently in the app — export your own data first if you want to keep it.'
+      )
+    ) {
+      importData(
+        exampleData.nodes as unknown as TopicNode[],
+        exampleData.categories as unknown as Category[],
+        undefined,
+        (exampleData.customEdges ?? []) as unknown as GraphEdge[]
+      );
+    }
+  };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -190,31 +207,46 @@ export default function SettingsPage() {
         {/* Import */}
         <section className="card space-y-4">
           <h2 className="font-semibold">Import & Reset</h2>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="btn-secondary"
-            >
-              <Upload className="h-4 w-4" /> Import JSON
-            </button>
-            <button
-              onClick={() => {
-                if (confirm('Reset all data to defaults? This cannot be undone.')) {
-                  resetToDefault();
-                }
-              }}
-              className="btn-secondary text-red-500"
-            >
-              <RotateCcw className="h-4 w-4" /> Reset to Default
-            </button>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleImport}
-            className="hidden"
-          />
+          {isReadOnlyBuild ? (
+            <p className="text-sm text-[var(--color-text-muted)]">
+              Import, reset, and example data are only available when running the app locally.
+            </p>
+          ) : (
+            <>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="btn-secondary"
+                >
+                  <Upload className="h-4 w-4" /> Import JSON
+                </button>
+                <button onClick={handleLoadExample} className="btn-secondary">
+                  <FileJson className="h-4 w-4" /> Load Example Data
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm('Reset all data to defaults? This cannot be undone.')) {
+                      resetToDefault();
+                    }
+                  }}
+                  className="btn-secondary text-red-500"
+                >
+                  <RotateCcw className="h-4 w-4" /> Reset to Default
+                </button>
+              </div>
+              <p className="text-xs text-[var(--color-text-muted)]">
+                New here? "Load Example Data" shows every field the app supports, filled in as a
+                reference — see also <code className="rounded bg-surface-elevated px-1">src/data/example-data.json</code>.
+              </p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                onChange={handleImport}
+                className="hidden"
+              />
+            </>
+          )}
         </section>
 
         {/* Data Info */}
@@ -257,18 +289,25 @@ export default function SettingsPage() {
             <ol className="list-decimal space-y-1.5 pl-4 text-sm text-[var(--color-text-muted)]">
               <li>Edit freely here while running the app locally (Edit Mode).</li>
               <li>
-                Click <span className="font-medium text-[var(--color-text)]">Export → JSON</span> above.
+                Click <span className="font-medium text-[var(--color-text)]">Export → JSON</span> above
+                — the file it downloads is a complete, ready-to-use replacement for
+                {' '}<code className="rounded bg-surface-elevated px-1">src/data/initial-data.json</code>.
               </li>
               <li>
-                Replace <code className="rounded bg-surface-elevated px-1">src/data/initial-data.json</code>{' '}
-                with the exported file's <code className="rounded bg-surface-elevated px-1">nodes</code> and{' '}
-                <code className="rounded bg-surface-elevated px-1">categories</code>, and copy its{' '}
-                <code className="rounded bg-surface-elevated px-1">customEdges</code> array in too.
+                Run{' '}
+                <code className="rounded bg-surface-elevated px-1">
+                  npm run publish-data -- /path/to/downloaded-file.json
+                </code>{' '}
+                — this swaps in the new file and automatically saves a timestamped copy of
+                the old one under <code className="rounded bg-surface-elevated px-1">src/data/backups/</code>.
+                (Or just replace the file yourself — no fields need copying by hand either way.)
               </li>
               <li>Commit and push — GitHub Actions rebuilds and deploys automatically.</li>
               <li>
                 The deployed site always builds in read-only mode (Edit Mode never appears
-                there), so only you, editing locally, can change anything.
+                there), so only you, editing locally, can change anything. Every past commit —
+                plus the timestamped files in <code className="rounded bg-surface-elevated px-1">backups/</code> —
+                is a preserved earlier version you can always go back to.
               </li>
             </ol>
           )}

@@ -120,10 +120,32 @@ editing — so the app enforces a simple split instead:
 To publish your latest progress:
 
 1. Edit locally with Edit Mode on.
-2. In **Settings → Export → JSON**, download your data.
-3. Replace `src/data/initial-data.json`'s `nodes` and `categories` with the
-   export's, and copy the export's `customEdges` array in as well.
+2. In **Settings → Export → JSON**, download your data — this file is a complete,
+   ready-to-use replacement for `src/data/initial-data.json`. Nothing needs to
+   be copied between files by hand.
+3. Run:
+   ```bash
+   npm run publish-data -- /path/to/downloaded-file.json
+   ```
+   This swaps the file in and automatically saves a timestamped copy of the
+   previous one under `src/data/backups/` first — so older versions of your
+   progress are always kept. (You can also just replace
+   `src/data/initial-data.json` yourself; the script is a convenience, not a
+   requirement.)
 4. Commit and push — GitHub Actions rebuilds and redeploys automatically.
+
+Every git commit is also a preserved past version — `git log -- src/data/initial-data.json`
+shows the full history, and `git show <commit>:src/data/initial-data.json` recovers
+any older version on demand.
+
+## Example data
+
+`src/data/example-data.json` is a reference file (not your live data) showing every
+field the app supports — one node of each type (topic, project, milestone) filled
+in with example values, plus a custom connection between two of them. Use it as a
+template when you're not sure what a field should look like, or load it via
+**Settings → Load Example Data** to see it rendered in the app (this replaces
+whatever data is currently loaded, so export first if you want to keep it).
 
 ## Project Structure
 

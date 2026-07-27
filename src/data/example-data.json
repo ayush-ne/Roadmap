@@ -1,0 +1,141 @@
+{
+  "_comment": "This is a reference file, not your live data. It shows every field the app supports, filled in with example values. Use Settings -> 'Load Example Data' to load it into a fresh setup, or just read it as a template for the JSON shape.",
+  "categories": [
+    {
+      "id": "example",
+      "name": "Example",
+      "description": "A demo workflow showing every node type and field",
+      "color": "#6366f1",
+      "icon": "code"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "example-topic",
+      "title": "Sample Topic",
+      "category": "example",
+      "type": "topic",
+      "parentId": null,
+      "children": ["example-milestone"],
+      "status": "learning",
+      "confidence": 3,
+      "difficulty": 2,
+      "position": { "x": 0, "y": 0 },
+      "description": "A short summary of what this topic covers.",
+      "keyLearnings": [
+        "The main takeaway you want to remember",
+        "A second key insight"
+      ],
+      "notes": [
+        {
+          "id": "note-1",
+          "content": "Freeform **markdown** notes go here.",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "practice": [
+        { "id": "practice-1", "text": "Solve 5 practice problems", "completed": false }
+      ],
+      "resources": [
+        {
+          "id": "resource-1",
+          "title": "Official documentation",
+          "url": "https://example.com/docs",
+          "description": "",
+          "type": "documentation"
+        }
+      ],
+      "github": [
+        { "id": "repo-1", "title": "my-practice-repo", "url": "https://github.com/you/repo", "description": "" }
+      ],
+      "liveDemo": [
+        { "id": "demo-1", "title": "Live demo", "url": "https://example.com", "platform": "vercel" }
+      ],
+      "interviewNotes": [
+        {
+          "id": "interview-1",
+          "content": "Common interview question and how to answer it.",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "revisionNotes": [
+        {
+          "id": "revision-1",
+          "content": "Quick reminder to skim before an exam or interview.",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "tags": ["example", "reference"],
+      "related": [],
+      "estimatedHours": 4,
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "example-project",
+      "title": "Sample Project",
+      "category": "example",
+      "type": "project",
+      "parentId": null,
+      "children": [],
+      "status": "completed",
+      "confidence": 4,
+      "difficulty": 3,
+      "position": { "x": 260, "y": 0 },
+      "description": "What you built and why.",
+      "keyLearnings": ["What you'd do differently next time"],
+      "notes": [],
+      "practice": [],
+      "resources": [],
+      "github": [
+        { "id": "repo-2", "title": "project-repo", "url": "https://github.com/you/project", "description": "" }
+      ],
+      "liveDemo": [
+        { "id": "demo-2", "title": "Deployed app", "url": "https://your-project.vercel.app", "platform": "vercel" }
+      ],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "tags": ["project", "example"],
+      "related": [],
+      "estimatedHours": 20,
+      "architecture": "Frontend (React) -> API (Node/Express) -> Database (Postgres)",
+      "techStack": ["React", "Node.js", "PostgreSQL"],
+      "lessonsLearned": ["Something that worked well", "Something you'd change"],
+      "challenges": ["A tricky bug or design decision and how you solved it"],
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "example-milestone",
+      "title": "Sample Milestone",
+      "category": "example",
+      "type": "milestone",
+      "parentId": "example-topic",
+      "children": [],
+      "status": "not_started",
+      "confidence": 1,
+      "difficulty": 1,
+      "position": { "x": 0, "y": 160 },
+      "description": "A checkpoint marking a goal, like 'finished module 1' or 'ready for interviews'.",
+      "keyLearnings": [],
+      "notes": [],
+      "practice": [],
+      "resources": [],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "tags": [],
+      "related": [],
+      "estimatedHours": 0,
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "customEdges": [
+    {
+      "id": "custom-example-1",
+      "source": "example-project",
+      "target": "example-topic",
+      "type": "custom",
+      "label": "uses concepts from"
+    }
+  ]
+}
