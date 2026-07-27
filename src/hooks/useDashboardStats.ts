@@ -12,8 +12,8 @@ export function useDashboardStats(): DashboardStats {
   const nodes = useStore((s) => s.nodes);
 
   return useMemo(() => {
-    const topics = nodes.filter((n) => !n.isProject);
-    const projects = nodes.filter((n) => n.isProject);
+    const topics = nodes.filter((n) => n.type === 'topic');
+    const projects = nodes.filter((n) => n.type === 'project');
     const learning = topics.filter((n) => n.status === 'learning');
 
     const sorted = [...nodes].sort(

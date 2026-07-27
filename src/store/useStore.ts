@@ -36,9 +36,13 @@ interface AppState {
   selectNode: (id: string | null) => void;
   setSidebarOpen: (open: boolean) => void;
   updateNode: (id: string, updates: Partial<TopicNode>) => void;
-  addNode: (parentId: string | null, category: string) => string;
+  addNode: (
+    parentId: string | null,
+    category: string,
+    overrides?: Partial<TopicNode>
+  ) => string;
   deleteNode: (id: string) => void;
-  addChildNode: (parentId: string) => string;
+  addChildNode: (parentId: string, overrides?: Partial<TopicNode>) => string;
   addLink: (sourceId: string, targetId: string) => void;
   removeLink: (sourceId: string, targetId: string) => void;
   moveNode: (id: string, position: { x: number; y: number }) => void;
@@ -52,6 +56,10 @@ interface AppState {
   addNote: (nodeId: string, content: string) => void;
   updateNote: (nodeId: string, noteId: string, content: string) => void;
   deleteNote: (nodeId: string, noteId: string) => void;
+  addInterviewNote: (nodeId: string, content: string) => void;
+  deleteInterviewNote: (nodeId: string, noteId: string) => void;
+  addRevisionNote: (nodeId: string, content: string) => void;
+  deleteRevisionNote: (nodeId: string, noteId: string) => void;
   addPractice: (nodeId: string, text: string) => void;
   togglePractice: (nodeId: string, practiceId: string) => void;
   deletePractice: (nodeId: string, practiceId: string) => void;
@@ -113,8 +121,25 @@ const defaultSettings: AppSettings = {
   activeCategory: 'python',
 };
 
+// Normalizes nodes from older data shapes (e.g. a boolean `isProject` instead
+// of `type`, or missing `interviewNotes`/`revisionNotes`) into the current
+// TopicNode schema. Safe to run on already-current data — it's a no-op then.
+function migrateNode(raw: TopicNode & { isProject?: boolean }): TopicNode {
+  const { isProject, ...rest } = raw;
+  return {
+    ...rest,
+    type: rest.type ?? (isProject ? 'project' : 'topic'),
+    interviewNotes: rest.interviewNotes ?? [],
+    revisionNotes: rest.revisionNotes ?? [],
+  };
+}
+
+function migrateNodes(nodes: TopicNode[]): TopicNode[] {
+  return nodes.map(migrateNode);
+}
+
 function initFromData() {
-  const nodes = initialData.nodes as TopicNode[];
+  const nodes = migrateNodes(initialData.nodes as unknown as TopicNode[]);
   const categories = initialData.categories as Category[];
   const edges = buildEdgesFromNodes(nodes);
   const customEdges = ((initialData as { customEdges?: GraphEdge[] }).customEdges ?? []) as GraphEdge[];
@@ -144,13 +169,14 @@ export const useStore = create<AppState>()(
           ),
         })),
 
-      addNode: (parentId, category) => {
+      addNode: (parentId, category, overrides) => {
         const id = uuidv4();
         const parent = parentId ? get().nodes.find((n) => n.id === parentId) : null;
         const newNode: TopicNode = {
           id,
           title: 'New Topic',
           category,
+          type: 'topic',
           status: 'not_started',
           description: '',
           difficulty: 2,
@@ -162,6 +188,8 @@ export const useStore = create<AppState>()(
           resources: [],
           github: [],
           liveDemo: [],
+          interviewNotes: [],
+          revisionNotes: [],
           related: [],
           children: [],
           parentId,
@@ -170,7 +198,7 @@ export const useStore = create<AppState>()(
           position: parent
             ? { x: parent.position.x + 220, y: parent.position.y }
             : { x: 0, y: 0 },
-          isProject: false,
+          ...overrides,
         };
 
         set((state) => {
@@ -228,9 +256,13 @@ export const useStore = create<AppState>()(
           };
         }),
 
-      addChildNode: (parentId) => {
+      addChildNode: (parentId, overrides) => {
         const parent = get().nodes.find((n) => n.id === parentId);
-        return get().addNode(parentId, parent?.category ?? get().settings.activeCategory);
+        return get().addNode(
+          parentId,
+          parent?.category ?? get().settings.activeCategory,
+          overrides
+        );
       },
 
       addLink: (sourceId, targetId) =>
@@ -343,6 +375,64 @@ export const useStore = create<AppState>()(
               ? {
                   ...n,
                   notes: n.notes.filter((note) => note.id !== noteId),
+                  updatedAt: new Date().toISOString(),
+                }
+              : n
+          ),
+        })),
+
+      addInterviewNote: (nodeId, content) =>
+        set((state) => ({
+          nodes: state.nodes.map((n) =>
+            n.id === nodeId
+              ? {
+                  ...n,
+                  interviewNotes: [
+                    ...n.interviewNotes,
+                    { id: uuidv4(), content, createdAt: new Date().toISOString() },
+                  ],
+                  updatedAt: new Date().toISOString(),
+                }
+              : n
+          ),
+        })),
+
+      deleteInterviewNote: (nodeId, noteId) =>
+        set((state) => ({
+          nodes: state.nodes.map((n) =>
+            n.id === nodeId
+              ? {
+                  ...n,
+                  interviewNotes: n.interviewNotes.filter((note) => note.id !== noteId),
+                  updatedAt: new Date().toISOString(),
+                }
+              : n
+          ),
+        })),
+
+      addRevisionNote: (nodeId, content) =>
+        set((state) => ({
+          nodes: state.nodes.map((n) =>
+            n.id === nodeId
+              ? {
+                  ...n,
+                  revisionNotes: [
+                    ...n.revisionNotes,
+                    { id: uuidv4(), content, createdAt: new Date().toISOString() },
+                  ],
+                  updatedAt: new Date().toISOString(),
+                }
+              : n
+          ),
+        })),
+
+      deleteRevisionNote: (nodeId, noteId) =>
+        set((state) => ({
+          nodes: state.nodes.map((n) =>
+            n.id === nodeId
+              ? {
+                  ...n,
+                  revisionNotes: n.revisionNotes.filter((note) => note.id !== noteId),
                   updatedAt: new Date().toISOString(),
                 }
               : n
@@ -542,13 +632,15 @@ export const useStore = create<AppState>()(
           settings: { ...state.settings, layoutMode: mode },
         })),
 
-      importData: (nodes, categories, edges, customEdges) =>
+      importData: (nodes, categories, edges, customEdges) => {
+        const migrated = migrateNodes(nodes);
         set({
-          nodes,
+          nodes: migrated,
           categories: categories.length > 0 ? categories : get().categories,
-          edges: edges ?? buildEdgesFromNodes(nodes),
+          edges: edges ?? buildEdgesFromNodes(migrated),
           customEdges: customEdges ?? [],
-        }),
+        });
+      },
 
       resetToDefault: () => {
         const data = initFromData();
@@ -569,15 +661,15 @@ export const useStore = create<AppState>()(
         const categoryNodes = state.nodes.filter(
           (n) =>
             n.category === state.settings.activeCategory ||
-            (n.isProject && state.settings.activeCategory === 'projects')
+            (n.type === 'project' && state.settings.activeCategory === 'projects')
         );
         return filterNodes(categoryNodes, state.filters);
       },
 
       getDashboardStats: (): DashboardStats => {
         const { nodes } = get();
-        const topics = nodes.filter((n) => !n.isProject);
-        const projects = nodes.filter((n) => n.isProject);
+        const topics = nodes.filter((n) => n.type === 'topic');
+        const projects = nodes.filter((n) => n.type === 'project');
         const learning = topics.filter((n) => n.status === 'learning');
         const sorted = [...nodes].sort(
           (a, b) =>
@@ -628,6 +720,14 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'knowledge-graph-storage',
+      version: 1,
+      migrate: (persistedState, version) => {
+        const state = persistedState as { nodes?: TopicNode[] } & Record<string, unknown>;
+        if (version < 1 && Array.isArray(state?.nodes)) {
+          state.nodes = migrateNodes(state.nodes);
+        }
+        return state;
+      },
       partialize: (state) => ({
         nodes: state.nodes,
         categories: state.categories,

@@ -17,12 +17,14 @@ import {
 import '@xyflow/react/dist/style.css';
 import { Plus, LayoutGrid, GitBranch, Share2, FolderPlus, X, Cable } from 'lucide-react';
 import CustomNode from './CustomNode';
+import CreateNodeModal from './CreateNodeModal';
 import FilterPanel from '@/components/Search/FilterPanel';
 import { useStore } from '@/store/useStore';
 import { useFilteredNodes } from '@/hooks/useFilteredNodes';
 import { getVisibleNodes } from '@/utils/layout';
 import { isReadOnlyBuild } from '@/utils/env';
-import type { LayoutMode } from '@/types';
+import type { LayoutMode, NodeType } from '@/types';
+import { NODE_TYPE_CONFIG } from '@/types';
 
 const nodeTypes = { custom: CustomNode };
 
@@ -43,7 +45,6 @@ export default function KnowledgeGraph() {
   const activeCategory = useStore((s) => s.settings.activeCategory);
   const categories = useStore((s) => s.categories);
   const moveNode = useStore((s) => s.moveNode);
-  const addNode = useStore((s) => s.addNode);
   const addCategory = useStore((s) => s.addCategory);
   const deleteCategory = useStore((s) => s.deleteCategory);
   const setActiveCategory = useStore((s) => s.setActiveCategory);
@@ -54,6 +55,7 @@ export default function KnowledgeGraph() {
   const removeCustomEdge = useStore((s) => s.removeCustomEdge);
 
   const [connectHint, setConnectHint] = useState(false);
+  const [createModal, setCreateModal] = useState<{ parentId: string | null } | null>(null);
 
   const visibleNodes = useMemo(() => getVisibleNodes(filteredNodes), [filteredNodes]);
 
@@ -61,6 +63,10 @@ export default function KnowledgeGraph() {
     () => new Set(visibleNodes.map((n) => n.id)),
     [visibleNodes]
   );
+
+  const handleAddChild = useCallback((parentId: string) => {
+    setCreateModal({ parentId });
+  }, []);
 
   const flowNodes: Node[] = useMemo(
     () =>
@@ -72,9 +78,10 @@ export default function KnowledgeGraph() {
           node,
           editMode,
           compact: viewMode === 'compact',
+          onAddChild: handleAddChild,
         },
       })),
-    [visibleNodes, editMode, viewMode]
+    [visibleNodes, editMode, viewMode, handleAddChild]
   );
 
   const flowEdges: Edge[] = useMemo(() => {
@@ -156,8 +163,7 @@ export default function KnowledgeGraph() {
   );
 
   const handleAddRoot = () => {
-    const id = addNode(null, activeCategory);
-    selectNode(id);
+    setCreateModal({ parentId: null });
   };
 
   const handleAddWorkflow = () => {
@@ -182,7 +188,7 @@ export default function KnowledgeGraph() {
   };
 
   return (
-    <div ref={graphRef} className="h-full w-full">
+    <div ref={graphRef} className="relative h-full w-full">
       <ReactFlow
         nodes={nodes}
         edges={flowEdgesState}
@@ -204,9 +210,9 @@ export default function KnowledgeGraph() {
         <Controls showInteractive={false} />
         <MiniMap
           nodeColor={(n) => {
-            const node = (n.data as { node: { isProject: boolean; status: string } })?.node;
-            if (node?.isProject) return '#a855f7';
-            return '#6366f1';
+            const node = (n.data as { node: { type: NodeType } })?.node;
+            if (!node) return NODE_TYPE_CONFIG.topic.color;
+            return NODE_TYPE_CONFIG[node.type].color;
           }}
           maskColor="rgba(0,0,0,0.6)"
           className="!bottom-4 !right-4"
@@ -309,6 +315,17 @@ export default function KnowledgeGraph() {
           )}
         </Panel>
       </ReactFlow>
+
+      {createModal && (
+        <CreateNodeModal
+          parentId={createModal.parentId}
+          onClose={() => setCreateModal(null)}
+          onCreated={(id) => {
+            setCreateModal(null);
+            selectNode(id);
+          }}
+        />
+      )}
     </div>
   );
 }

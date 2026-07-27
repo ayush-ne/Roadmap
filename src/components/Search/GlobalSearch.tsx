@@ -90,7 +90,7 @@ export default function GlobalSearch({ compact }: GlobalSearchProps) {
                     >
                       <span>{STATUS_CONFIG[node.status].emoji}</span>
                       <span className="truncate">{node.title}</span>
-                      {node.isProject && (
+                      {node.type === 'project' && (
                         <span className="ml-auto text-[10px] text-purple-400">Project</span>
                       )}
                     </button>
@@ -182,7 +182,7 @@ export function SearchResults() {
                 ))}
               </div>
             </div>
-            {node.isProject && (
+            {node.type === 'project' && (
               <span className="badge bg-purple-500/15 text-purple-400">Project</span>
             )}
           </button>

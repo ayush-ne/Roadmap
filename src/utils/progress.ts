@@ -2,7 +2,8 @@ import type { NodeStatus, TopicNode } from '@/types';
 import { STATUS_CONFIG } from '@/types';
 
 export function getNodeProgress(node: TopicNode): number {
-  if (node.isProject) {
+  if (typeof node.progress === 'number') return node.progress;
+  if (node.type !== 'topic') {
     return node.status === 'completed' ? 100 : node.status === 'learning' ? 50 : 0;
   }
   const base = STATUS_CONFIG[node.status].progress;
@@ -14,7 +15,7 @@ export function getNodeProgress(node: TopicNode): number {
 }
 
 export function calculateOverallProgress(nodes: TopicNode[]): number {
-  const topics = nodes.filter((n) => !n.isProject);
+  const topics = nodes.filter((n) => n.type === 'topic');
   if (topics.length === 0) return 0;
   const total = topics.reduce((sum, n) => sum + getNodeProgress(n), 0);
   return Math.round(total / topics.length);
@@ -25,7 +26,7 @@ export function calculateCategoryProgress(
   categoryId: string
 ): number {
   const categoryNodes = nodes.filter(
-    (n) => n.category === categoryId && !n.isProject
+    (n) => n.category === categoryId && n.type === 'topic'
   );
   if (categoryNodes.length === 0) return 0;
   const total = categoryNodes.reduce((sum, n) => sum + getNodeProgress(n), 0);
@@ -36,7 +37,7 @@ export function countByStatus(
   nodes: TopicNode[],
   status: NodeStatus
 ): number {
-  return nodes.filter((n) => n.status === status && !n.isProject).length;
+  return nodes.filter((n) => n.status === status && n.type === 'topic').length;
 }
 
 export function getCompletedHours(nodes: TopicNode[]): number {
@@ -65,7 +66,7 @@ export function getCategoryBreakdown(
   return categories.map((cat) => ({
     name: cat.name,
     progress: calculateCategoryProgress(nodes, cat.id),
-    count: nodes.filter((n) => n.category === cat.id && !n.isProject).length,
+    count: nodes.filter((n) => n.category === cat.id && n.type === 'topic').length,
   }));
 }
 

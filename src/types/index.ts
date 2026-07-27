@@ -47,6 +47,8 @@ export interface PracticeItem {
   completed: boolean;
 }
 
+export type NodeType = 'topic' | 'project' | 'milestone';
+
 export interface Note {
   id: string;
   content: string;
@@ -57,25 +59,30 @@ export interface TopicNode {
   id: string;
   title: string;
   category: string;
+  type: NodeType;
+  parentId: string | null;
+  children: string[];
   status: NodeStatus;
-  description: string;
-  difficulty: number;
   confidence: number;
-  estimatedHours: number;
+  difficulty: number;
+  position: { x: number; y: number };
+  description: string;
   keyLearnings: string[];
   notes: Note[];
   practice: PracticeItem[];
   resources: Resource[];
   github: GitHubRepo[];
   liveDemo: LiveDemo[];
-  related: string[];
-  children: string[];
-  parentId: string | null;
+  interviewNotes: Note[];
+  revisionNotes: Note[];
   tags: string[];
-  updatedAt: string;
-  position: { x: number; y: number };
-  isProject: boolean;
+  related: string[];
+  estimatedHours: number;
+  /** Manual override, 0-100. When unset, progress is auto-calculated from status/practice. */
+  progress?: number;
   collapsed?: boolean;
+  updatedAt: string;
+  // Project-specific extras (only meaningful when type === 'project')
   architecture?: string;
   techStack?: string[];
   lessonsLearned?: string[];
@@ -173,6 +180,27 @@ export const STATUS_CONFIG: Record<
     bgColor: 'rgba(239, 68, 68, 0.15)',
     progress: 0,
     emoji: '🔴',
+  },
+};
+
+export const NODE_TYPE_CONFIG: Record<
+  NodeType,
+  { label: string; color: string; bgColor: string }
+> = {
+  topic: {
+    label: 'Topic',
+    color: '#6366f1',
+    bgColor: 'rgba(99, 102, 241, 0.12)',
+  },
+  project: {
+    label: 'Project',
+    color: '#a855f7',
+    bgColor: 'rgba(168, 85, 247, 0.12)',
+  },
+  milestone: {
+    label: 'Milestone',
+    color: '#f59e0b',
+    bgColor: 'rgba(245, 158, 11, 0.12)',
   },
 };
 

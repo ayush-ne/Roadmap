@@ -12,7 +12,7 @@ export function useFilteredNodes(): TopicNode[] {
     const categoryNodes = nodes.filter(
       (n) =>
         n.category === activeCategory ||
-        (n.isProject && activeCategory === 'projects')
+        (n.type === 'project' && activeCategory === 'projects')
     );
 
     return filterNodes(categoryNodes, filters);

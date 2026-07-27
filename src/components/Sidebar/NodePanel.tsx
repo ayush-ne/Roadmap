@@ -15,8 +15,15 @@ import {
 import ReactMarkdown from 'react-markdown';
 import { useStore } from '@/store/useStore';
 import { useRelatedNodes } from '@/hooks/useRelatedNodes';
-import { STATUS_CONFIG, RESOURCE_TYPE_LABELS, type NodeStatus, type ResourceType } from '@/types';
-import { getNodeProgress, renderDifficulty } from '@/utils/progress';
+import {
+  STATUS_CONFIG,
+  RESOURCE_TYPE_LABELS,
+  NODE_TYPE_CONFIG,
+  type NodeStatus,
+  type ResourceType,
+  type NodeType,
+} from '@/types';
+import { getNodeProgress } from '@/utils/progress';
 import { isReadOnlyBuild } from '@/utils/env';
 
 const ALL_STATUSES: NodeStatus[] = [
@@ -38,6 +45,11 @@ export default function NodePanel() {
   const renameNode = useStore((s) => s.renameNode);
   const addNote = useStore((s) => s.addNote);
   const deleteNote = useStore((s) => s.deleteNote);
+  const addInterviewNote = useStore((s) => s.addInterviewNote);
+  const deleteInterviewNote = useStore((s) => s.deleteInterviewNote);
+  const addRevisionNote = useStore((s) => s.addRevisionNote);
+  const deleteRevisionNote = useStore((s) => s.deleteRevisionNote);
+  const categories = useStore((s) => s.categories);
   const addPractice = useStore((s) => s.addPractice);
   const togglePractice = useStore((s) => s.togglePractice);
   const deletePractice = useStore((s) => s.deletePractice);
@@ -103,8 +115,34 @@ export default function NodePanel() {
               <h2 className="truncate text-lg font-bold">{node.title}</h2>
             )}
             <p className="text-xs text-[var(--color-text-muted)]">
-              {node.isProject ? '🟣 Project' : STATUS_CONFIG[node.status].label}
+              {node.type !== 'topic'
+                ? `${node.type === 'project' ? '🟣' : '🚩'} ${NODE_TYPE_CONFIG[node.type].label}`
+                : STATUS_CONFIG[node.status].label}
             </p>
+            {canEdit && (
+              <div className="mt-2 flex gap-1.5">
+                <select
+                  value={node.type}
+                  onChange={(e) => updateNode(node.id, { type: e.target.value as NodeType })}
+                  className="input-field flex-1 text-xs"
+                >
+                  <option value="topic">Topic</option>
+                  <option value="project">Project</option>
+                  <option value="milestone">Milestone</option>
+                </select>
+                <select
+                  value={node.category}
+                  onChange={(e) => updateNode(node.id, { category: e.target.value })}
+                  className="input-field flex-1 text-xs"
+                >
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           <button
             onClick={() => {
@@ -122,7 +160,17 @@ export default function NodePanel() {
           <section className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div className="card !p-3">
-                <p className="section-title">Progress</p>
+                <div className="flex items-center justify-between">
+                  <p className="section-title">Progress</p>
+                  {canEdit && node.progress !== undefined && (
+                    <button
+                      onClick={() => updateNode(node.id, { progress: undefined })}
+                      className="text-[10px] text-accent hover:underline"
+                    >
+                      Auto
+                    </button>
+                  )}
+                </div>
                 <p className="mt-1 text-xl font-bold text-accent">{progress}%</p>
                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-elevated">
                   <div
@@ -130,18 +178,64 @@ export default function NodePanel() {
                     style={{ width: `${progress}%` }}
                   />
                 </div>
+                {canEdit && (
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={node.progress ?? progress}
+                    onChange={(e) =>
+                      updateNode(node.id, { progress: Number(e.target.value) })
+                    }
+                    className="mt-2 w-full accent-[var(--color-accent)]"
+                  />
+                )}
               </div>
               <div className="card !p-3">
                 <p className="section-title">Difficulty</p>
-                <p className="mt-1 text-sm">{renderDifficulty(node.difficulty)}</p>
+                <div className="mt-1 flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <button
+                      key={level}
+                      onClick={() => canEdit && updateNode(node.id, { difficulty: level })}
+                      disabled={!canEdit}
+                      className={canEdit ? 'hover:scale-110' : 'cursor-default'}
+                    >
+                      <Star
+                        className={`h-4 w-4 ${
+                          level <= node.difficulty
+                            ? 'fill-orange-400 text-orange-400'
+                            : 'text-[var(--color-text-muted)]'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-sm text-[var(--color-text-muted)]">
-              <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
-                {node.estimatedHours}h
-              </span>
+            <div className="flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
+              <Clock className="h-3.5 w-3.5 shrink-0" />
+              {canEdit ? (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.5}
+                    defaultValue={node.estimatedHours}
+                    onBlur={(e) => {
+                      const value = Number(e.target.value);
+                      if (!Number.isNaN(value) && value !== node.estimatedHours) {
+                        updateNode(node.id, { estimatedHours: value });
+                      }
+                    }}
+                    className="input-field w-20 text-sm"
+                  />
+                  <span>estimated hours</span>
+                </div>
+              ) : (
+                <span>{node.estimatedHours}h estimated</span>
+              )}
             </div>
 
             <div>
@@ -269,46 +363,169 @@ export default function NodePanel() {
           )}
 
           {/* Project-specific sections */}
-          {node.isProject && (
+          {node.type === 'project' && (
             <>
-              {node.architecture && (
-                <section>
-                  <p className="section-title mb-2">Architecture</p>
-                  <p className="rounded-lg bg-surface-elevated p-3 font-mono text-xs">
-                    {node.architecture}
-                  </p>
-                </section>
-              )}
-              {node.techStack && node.techStack.length > 0 && (
+              <section>
+                <p className="section-title mb-2">Architecture</p>
+                {canEdit ? (
+                  <textarea
+                    key={node.id}
+                    defaultValue={node.architecture ?? ''}
+                    placeholder="High-level architecture / stack notes..."
+                    rows={3}
+                    onBlur={(e) => {
+                      const value = e.target.value.trim();
+                      if (value !== (node.architecture ?? '')) {
+                        updateNode(node.id, { architecture: value });
+                      }
+                    }}
+                    className="input-field w-full resize-none font-mono text-xs"
+                  />
+                ) : (
+                  node.architecture && (
+                    <p className="rounded-lg bg-surface-elevated p-3 font-mono text-xs">
+                      {node.architecture}
+                    </p>
+                  )
+                )}
+              </section>
+
+              {((node.techStack && node.techStack.length > 0) || canEdit) && (
                 <section>
                   <p className="section-title mb-2">Tech Stack</p>
                   <div className="flex flex-wrap gap-1.5">
-                    {node.techStack.map((tech) => (
-                      <span key={tech} className="badge bg-accent-muted text-accent">
+                    {(node.techStack ?? []).map((tech, i) => (
+                      <span
+                        key={tech}
+                        className="group flex items-center gap-1 badge bg-accent-muted text-accent"
+                      >
                         {tech}
+                        {canEdit && (
+                          <button
+                            onClick={() =>
+                              updateNode(node.id, {
+                                techStack: (node.techStack ?? []).filter((_, idx) => idx !== i),
+                              })
+                            }
+                          >
+                            <X className="h-2.5 w-2.5" />
+                          </button>
+                        )}
                       </span>
                     ))}
                   </div>
+                  {canEdit && (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const form = e.target as HTMLFormElement;
+                        const input = form.elements.namedItem('tech') as HTMLInputElement;
+                        const value = input.value.trim();
+                        if (value) {
+                          updateNode(node.id, { techStack: [...(node.techStack ?? []), value] });
+                          form.reset();
+                        }
+                      }}
+                      className="mt-2 flex gap-2"
+                    >
+                      <input name="tech" placeholder="Add tech (e.g. React)..." className="input-field flex-1 text-sm" />
+                      <button type="submit" className="btn-primary !px-2">
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </form>
+                  )}
                 </section>
               )}
-              {node.lessonsLearned && node.lessonsLearned.length > 0 && (
+
+              {((node.lessonsLearned && node.lessonsLearned.length > 0) || canEdit) && (
                 <section>
                   <p className="section-title mb-2">Lessons Learned</p>
                   <ul className="space-y-1 text-sm">
-                    {node.lessonsLearned.map((l, i) => (
-                      <li key={i}>• {l}</li>
+                    {(node.lessonsLearned ?? []).map((l, i) => (
+                      <li key={i} className="group flex items-start gap-2">
+                        <span className="min-w-0 flex-1">• {l}</span>
+                        {canEdit && (
+                          <button
+                            onClick={() =>
+                              updateNode(node.id, {
+                                lessonsLearned: (node.lessonsLearned ?? []).filter((_, idx) => idx !== i),
+                              })
+                            }
+                            className="shrink-0 text-red-500 opacity-0 group-hover:opacity-100"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        )}
+                      </li>
                     ))}
                   </ul>
+                  {canEdit && (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const form = e.target as HTMLFormElement;
+                        const input = form.elements.namedItem('lesson') as HTMLInputElement;
+                        const value = input.value.trim();
+                        if (value) {
+                          updateNode(node.id, {
+                            lessonsLearned: [...(node.lessonsLearned ?? []), value],
+                          });
+                          form.reset();
+                        }
+                      }}
+                      className="mt-2 flex gap-2"
+                    >
+                      <input name="lesson" placeholder="Add a lesson learned..." className="input-field flex-1 text-sm" />
+                      <button type="submit" className="btn-primary !px-2">
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </form>
+                  )}
                 </section>
               )}
-              {node.challenges && node.challenges.length > 0 && (
+
+              {((node.challenges && node.challenges.length > 0) || canEdit) && (
                 <section>
                   <p className="section-title mb-2">Challenges</p>
                   <ul className="space-y-1 text-sm">
-                    {node.challenges.map((c, i) => (
-                      <li key={i}>• {c}</li>
+                    {(node.challenges ?? []).map((c, i) => (
+                      <li key={i} className="group flex items-start gap-2">
+                        <span className="min-w-0 flex-1">• {c}</span>
+                        {canEdit && (
+                          <button
+                            onClick={() =>
+                              updateNode(node.id, {
+                                challenges: (node.challenges ?? []).filter((_, idx) => idx !== i),
+                              })
+                            }
+                            className="shrink-0 text-red-500 opacity-0 group-hover:opacity-100"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        )}
+                      </li>
                     ))}
                   </ul>
+                  {canEdit && (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const form = e.target as HTMLFormElement;
+                        const input = form.elements.namedItem('challenge') as HTMLInputElement;
+                        const value = input.value.trim();
+                        if (value) {
+                          updateNode(node.id, { challenges: [...(node.challenges ?? []), value] });
+                          form.reset();
+                        }
+                      }}
+                      className="mt-2 flex gap-2"
+                    >
+                      <input name="challenge" placeholder="Add a challenge..." className="input-field flex-1 text-sm" />
+                      <button type="submit" className="btn-primary !px-2">
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </form>
+                  )}
                 </section>
               )}
             </>
@@ -358,6 +575,100 @@ export default function NodePanel() {
               )}
             </div>
           </section>
+
+          {/* Interview Notes */}
+          {(node.interviewNotes.length > 0 || canEdit) && (
+            <section>
+              <p className="section-title mb-2">Interview Notes</p>
+              <div className="space-y-2">
+                {node.interviewNotes.map((note) => (
+                  <div
+                    key={note.id}
+                    className="group relative rounded-lg bg-surface-elevated p-3 text-sm"
+                  >
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <ReactMarkdown>{note.content}</ReactMarkdown>
+                    </div>
+                    {canEdit && (
+                      <button
+                        onClick={() => deleteInterviewNote(node.id, note.id)}
+                        className="absolute right-2 top-2 hidden rounded p-1 text-red-500 group-hover:block"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                {canEdit && (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const input = (e.target as HTMLFormElement).elements.namedItem(
+                        'interviewNote'
+                      ) as HTMLInputElement;
+                      if (input.value.trim()) {
+                        addInterviewNote(node.id, input.value.trim());
+                        input.value = '';
+                      }
+                    }}
+                  >
+                    <input
+                      name="interviewNote"
+                      placeholder="Add an interview prep note..."
+                      className="input-field text-sm"
+                    />
+                  </form>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* Revision Notes */}
+          {(node.revisionNotes.length > 0 || canEdit) && (
+            <section>
+              <p className="section-title mb-2">Revision Notes</p>
+              <div className="space-y-2">
+                {node.revisionNotes.map((note) => (
+                  <div
+                    key={note.id}
+                    className="group relative rounded-lg bg-surface-elevated p-3 text-sm"
+                  >
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <ReactMarkdown>{note.content}</ReactMarkdown>
+                    </div>
+                    {canEdit && (
+                      <button
+                        onClick={() => deleteRevisionNote(node.id, note.id)}
+                        className="absolute right-2 top-2 hidden rounded p-1 text-red-500 group-hover:block"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                {canEdit && (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const input = (e.target as HTMLFormElement).elements.namedItem(
+                        'revisionNote'
+                      ) as HTMLInputElement;
+                      if (input.value.trim()) {
+                        addRevisionNote(node.id, input.value.trim());
+                        input.value = '';
+                      }
+                    }}
+                  >
+                    <input
+                      name="revisionNote"
+                      placeholder="Add a quick-revision note..."
+                      className="input-field text-sm"
+                    />
+                  </form>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* Practice */}
           <section>
@@ -722,16 +1033,45 @@ export default function NodePanel() {
           )}
 
           {/* Tags */}
-          {node.tags.length > 0 && (
+          {(node.tags.length > 0 || canEdit) && (
             <section>
               <p className="section-title mb-2">Tags</p>
               <div className="flex flex-wrap gap-1.5">
-                {node.tags.map((tag) => (
-                  <span key={tag} className="badge bg-accent-muted text-accent">
+                {node.tags.map((tag, i) => (
+                  <span key={tag} className="group flex items-center gap-1 badge bg-accent-muted text-accent">
                     {tag}
+                    {canEdit && (
+                      <button
+                        onClick={() =>
+                          updateNode(node.id, { tags: node.tags.filter((_, idx) => idx !== i) })
+                        }
+                      >
+                        <X className="h-2.5 w-2.5" />
+                      </button>
+                    )}
                   </span>
                 ))}
               </div>
+              {canEdit && (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const form = e.target as HTMLFormElement;
+                    const input = form.elements.namedItem('tag') as HTMLInputElement;
+                    const value = input.value.trim();
+                    if (value && !node.tags.includes(value)) {
+                      updateNode(node.id, { tags: [...node.tags, value] });
+                      form.reset();
+                    }
+                  }}
+                  className="mt-2 flex gap-2"
+                >
+                  <input name="tag" placeholder="Add a tag..." className="input-field flex-1 text-sm" />
+                  <button type="submit" className="btn-primary !px-2">
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </form>
+              )}
             </section>
           )}
         </div>

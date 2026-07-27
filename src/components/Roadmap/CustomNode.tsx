@@ -6,10 +6,11 @@ import {
   Trash2,
   Pencil,
   FolderGit2,
+  Flag,
   ChevronDown,
   ChevronRight,
 } from 'lucide-react';
-import { STATUS_CONFIG } from '@/types';
+import { STATUS_CONFIG, NODE_TYPE_CONFIG } from '@/types';
 import type { TopicNode } from '@/types';
 import { getNodeProgress } from '@/utils/progress';
 import { useStore } from '@/store/useStore';
@@ -18,11 +19,13 @@ export type CustomNodeData = {
   node: TopicNode;
   editMode: boolean;
   compact: boolean;
+  onAddChild?: (parentId: string) => void;
 };
 
 function CustomNode({ data, selected }: NodeProps) {
-  const { node, editMode, compact } = data as CustomNodeData;
+  const { node, editMode, compact, onAddChild } = data as CustomNodeData;
   const statusConfig = STATUS_CONFIG[node.status];
+  const typeConfig = NODE_TYPE_CONFIG[node.type];
   const progress = getNodeProgress(node);
   const addChildNode = useStore((s) => s.addChildNode);
   const deleteNode = useStore((s) => s.deleteNode);
@@ -34,11 +37,10 @@ function CustomNode({ data, selected }: NodeProps) {
   }, [node.id, selectNode]);
 
   const hasChildren = node.children.length > 0;
+  const isSpecial = node.type !== 'topic';
 
-  const borderColor = node.isProject ? '#a855f7' : statusConfig.color;
-  const bgColor = node.isProject
-    ? 'rgba(168, 85, 247, 0.12)'
-    : statusConfig.bgColor;
+  const borderColor = isSpecial ? typeConfig.color : statusConfig.color;
+  const bgColor = isSpecial ? typeConfig.bgColor : statusConfig.bgColor;
 
   return (
     <>
@@ -50,7 +52,7 @@ function CustomNode({ data, selected }: NodeProps) {
         whileHover={{ scale: 1.02 }}
         className={`relative cursor-pointer rounded-xl border-2 transition-shadow ${
           selected ? 'shadow-lg shadow-accent/20' : 'shadow-md'
-        } ${node.isProject ? 'min-w-[180px]' : 'min-w-[140px]'}`}
+        } ${isSpecial ? 'min-w-[180px]' : 'min-w-[140px]'}`}
         style={{
           borderColor,
           backgroundColor: 'var(--color-surface)',
@@ -64,14 +66,18 @@ function CustomNode({ data, selected }: NodeProps) {
         <div className={`relative ${compact ? 'p-2' : 'p-3'}`}>
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-1.5 min-w-0">
-              {node.isProject && (
+              {node.type === 'project' && (
                 <FolderGit2 className="h-3.5 w-3.5 shrink-0 text-purple-400" />
+              )}
+              {node.type === 'milestone' && (
+                <Flag className="h-3.5 w-3.5 shrink-0 text-amber-400" />
               )}
               <span className="text-[10px]">{statusConfig.emoji}</span>
               <span
                 className={`truncate font-semibold text-[var(--color-text)] ${
                   compact ? 'text-xs' : 'text-sm'
-                } ${node.isProject ? 'text-purple-300' : ''}`}
+                }`}
+                style={isSpecial ? { color: typeConfig.color } : undefined}
               >
                 {node.title}
               </span>
@@ -126,7 +132,7 @@ function CustomNode({ data, selected }: NodeProps) {
             <button
               className="rounded p-1 hover:bg-surface-elevated"
               title="Add Child"
-              onClick={() => addChildNode(node.id)}
+              onClick={() => (onAddChild ? onAddChild(node.id) : addChildNode(node.id))}
             >
               <Plus className="h-3 w-3 text-green-500" />
             </button>

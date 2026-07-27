@@ -27,8 +27,8 @@ export default function StatisticsPage() {
   const nodes = useStore((s) => s.nodes);
   const categories = useStore((s) => s.categories);
 
-  const topics = nodes.filter((n) => !n.isProject);
-  const projects = nodes.filter((n) => n.isProject);
+  const topics = nodes.filter((n) => n.type === 'topic');
+  const projects = nodes.filter((n) => n.type === 'project');
 
   const categoryData = getCategoryBreakdown(nodes, categories).filter((c) => c.count > 0);
 

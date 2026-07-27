@@ -147,7 +147,7 @@ export function applyLayout(
   categoryId?: string
 ): TopicNode[] {
   const filtered = categoryId
-    ? nodes.filter((n) => n.category === categoryId || n.isProject)
+    ? nodes.filter((n) => n.category === categoryId || n.type === 'project')
     : nodes;
 
   switch (mode) {
@@ -174,7 +174,7 @@ export function filterNodes(
   }
 ): TopicNode[] {
   return nodes.filter((node) => {
-    if (!filters.showProjects && node.isProject) return false;
+    if (!filters.showProjects && node.type === 'project') return false;
     if (filters.statuses.length > 0 && !filters.statuses.includes(node.status))
       return false;
     if (
