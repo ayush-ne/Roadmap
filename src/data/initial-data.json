@@ -4,10 +4,10 @@
       "id": "python-root",
       "title": "Python",
       "category": "python",
-      "status": "learning",
+      "status": "completed",
       "description": "Master Python from basics to advanced concepts",
-      "difficulty": 2,
-      "confidence": 3,
+      "difficulty": 3,
+      "confidence": 4,
       "estimatedHours": 40,
       "keyLearnings": [
         "Python is dynamically typed",
@@ -28,6 +28,13 @@
           "url": "https://docs.python.org/3/",
           "description": "Official documentation",
           "type": "documentation"
+        },
+        {
+          "title": "W3Schools",
+          "url": "https://www.w3schools.com/python",
+          "description": "",
+          "type": "documentation",
+          "id": "086aed28-2c8f-4746-8c62-31837d144253"
         }
       ],
       "github": [],
@@ -36,21 +43,24 @@
       "children": [
         "python-basics",
         "python-oop",
-        "python-async"
+        "python-async",
+        "41a1fd95-71fb-4341-96a8-2ef7fbf1a322",
+        "0214c434-49a5-4259-a77a-fb3d1c01feec"
       ],
       "parentId": null,
       "tags": [
         "Python",
         "Programming"
       ],
-      "updatedAt": "2025-01-15T10:00:00Z",
+      "updatedAt": "2026-07-28T09:39:16.963Z",
       "position": {
         "x": 0,
-        "y": 200
+        "y": 510
       },
       "type": "topic",
       "interviewNotes": [],
-      "revisionNotes": []
+      "revisionNotes": [],
+      "collapsed": false
     },
     {
       "id": "python-basics",
@@ -66,13 +76,7 @@
         "Indentation matters",
         "List comprehensions"
       ],
-      "notes": [
-        {
-          "id": "n2",
-          "content": "Practice with LeetCode easy problems",
-          "createdAt": "2025-01-16T10:00:00Z"
-        }
-      ],
+      "notes": [],
       "practice": [
         {
           "id": "p1",
@@ -97,6 +101,13 @@
           "url": "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
           "description": "Complete Python tutorial",
           "type": "youtube"
+        },
+        {
+          "title": "W3Schools",
+          "url": "https://www.w3schools.com/python",
+          "description": "",
+          "type": "documentation",
+          "id": "e7427bd9-5c57-4be7-8780-edf3f9b6eb7b"
         }
       ],
       "github": [
@@ -111,28 +122,30 @@
       "related": [],
       "children": [
         "python-variables",
-        "python-functions"
+        "python-functions",
+        "cc9ad319-8d0f-48e3-b12a-8fca874d5d70"
       ],
       "parentId": "python-root",
       "tags": [
         "Python",
         "Basics"
       ],
-      "updatedAt": "2025-01-20T10:00:00Z",
+      "updatedAt": "2026-07-28T09:38:54.159Z",
       "position": {
         "x": 220,
         "y": 100
       },
       "type": "topic",
       "interviewNotes": [],
-      "revisionNotes": []
+      "revisionNotes": [],
+      "progress": 100
     },
     {
       "id": "python-variables",
       "title": "Variables",
       "category": "python",
       "status": "completed",
-      "description": "Understanding variables, mutability, and scope",
+      "description": "Understanding variables and naming",
       "difficulty": 1,
       "confidence": 5,
       "estimatedHours": 2,
@@ -155,9 +168,10 @@
       "children": [],
       "parentId": "python-basics",
       "tags": [
-        "Python"
+        "Python",
+        "Variables"
       ],
-      "updatedAt": "2025-01-18T10:00:00Z",
+      "updatedAt": "2026-07-28T09:39:20.246Z",
       "position": {
         "x": 440,
         "y": 0
@@ -171,14 +185,12 @@
       "title": "Functions",
       "category": "python",
       "status": "completed",
-      "description": "Defining functions, args, kwargs, lambda, and closures",
+      "description": "Defining functions",
       "difficulty": 2,
       "confidence": 4,
       "estimatedHours": 4,
       "keyLearnings": [
-        "*args and **kwargs",
-        "Closures capture variables",
-        "First-class functions"
+        "Functions"
       ],
       "notes": [],
       "practice": [
@@ -197,15 +209,13 @@
       "github": [],
       "liveDemo": [],
       "related": [],
-      "children": [
-        "python-decorators"
-      ],
+      "children": [],
       "parentId": "python-basics",
       "tags": [
         "Python",
-        "Interview"
+        "Functions"
       ],
-      "updatedAt": "2025-01-19T10:00:00Z",
+      "updatedAt": "2026-07-28T09:39:18.821Z",
       "position": {
         "x": 440,
         "y": 100
@@ -215,137 +225,38 @@
       "revisionNotes": []
     },
     {
-      "id": "python-decorators",
-      "title": "Decorators",
-      "category": "python",
-      "status": "learning",
-      "description": "Wrapper functions that modify behavior of other functions",
-      "difficulty": 3,
-      "confidence": 3,
-      "estimatedHours": 3,
-      "keyLearnings": [
-        "Functions are first class objects",
-        "Wrapper functions",
-        "functools.wraps",
-        "Multiple decorators"
-      ],
-      "notes": [
-        {
-          "id": "n3",
-          "content": "Remember: @decorator is syntactic sugar for func = decorator(func)",
-          "createdAt": "2025-01-22T10:00:00Z"
-        }
-      ],
-      "practice": [
-        {
-          "id": "p7",
-          "text": "Logger Decorator",
-          "completed": true
-        },
-        {
-          "id": "p8",
-          "text": "Retry Decorator",
-          "completed": false
-        },
-        {
-          "id": "p9",
-          "text": "Authentication Decorator",
-          "completed": false
-        }
-      ],
-      "resources": [
-        {
-          "id": "r3",
-          "title": "Real Python Decorators",
-          "url": "https://realpython.com/primer-on-python-decorators/",
-          "description": "Comprehensive guide",
-          "type": "blog"
-        },
-        {
-          "id": "r4",
-          "title": "Decorator Cheat Sheet",
-          "url": "https://example.com",
-          "description": "Quick reference",
-          "type": "cheatsheet"
-        }
-      ],
-      "github": [
-        {
-          "id": "g2",
-          "title": "Decorator Examples",
-          "url": "https://github.com",
-          "description": "Example implementations"
-        }
-      ],
-      "liveDemo": [],
-      "related": [
-        "python-context-managers"
-      ],
-      "children": [
-        "python-context-managers"
-      ],
-      "parentId": "python-functions",
-      "tags": [
-        "Python",
-        "Interview",
-        "Backend"
-      ],
-      "updatedAt": "2026-07-27T06:56:15.599Z",
-      "position": {
-        "x": 646.0600706713781,
-        "y": 90.52296819787986
-      },
-      "type": "topic",
-      "interviewNotes": [],
-      "revisionNotes": []
-    },
-    {
-      "id": "python-context-managers",
-      "title": "Context Managers",
-      "category": "python",
-      "status": "not_started",
-      "description": "with statement and __enter__/__exit__ protocol",
-      "difficulty": 3,
-      "confidence": 1,
-      "estimatedHours": 2,
-      "keyLearnings": [],
-      "notes": [],
-      "practice": [],
-      "resources": [],
-      "github": [],
-      "liveDemo": [],
-      "related": [
-        "python-decorators"
-      ],
-      "children": [],
-      "parentId": "python-decorators",
-      "tags": [
-        "Python"
-      ],
-      "updatedAt": "2025-01-15T10:00:00Z",
-      "position": {
-        "x": 880,
-        "y": 150
-      },
-      "type": "topic",
-      "interviewNotes": [],
-      "revisionNotes": []
-    },
-    {
       "id": "python-oop",
       "title": "OOP",
       "category": "python",
-      "status": "revision",
-      "description": "Classes, inheritance, polymorphism, and magic methods",
+      "status": "completed",
+      "description": "Classes, Abstraction, inheritance, polymorphism, Encapsulation and Composition",
       "difficulty": 3,
       "confidence": 4,
-      "estimatedHours": 10,
+      "estimatedHours": 5,
       "keyLearnings": [
         "__init__ and __str__",
-        "Multiple inheritance MRO",
-        "Properties and descriptors"
+        "Properties and Methods",
+        "Inheritance, Polymorphism and Encapsulation",
+        "Self and super",
+        "Inheritance vs Compostion"
       ],
-      "notes": [],
+      "notes": [
+        {
+          "id": "2796dec2-3e43-46f9-b7f9-a5ceb2231504",
+          "content": "Functional and Class Poly",
+          "createdAt": "2026-07-28T06:52:04.225Z"
+        },
+        {
+          "id": "d9c995ce-b749-46c7-8c99-3b37ec670621",
+          "content": "private var/method by \"__\" starting",
+          "createdAt": "2026-07-28T06:52:47.141Z"
+        },
+        {
+          "id": "ebf164e4-cb5d-4e49-86ba-64d3ce628c2d",
+          "content": "conventions as protected to be \"_\" starting",
+          "createdAt": "2026-07-28T06:53:08.283Z"
+        }
+      ],
       "practice": [
         {
           "id": "p10",
@@ -353,7 +264,22 @@
           "completed": true
         }
       ],
-      "resources": [],
+      "resources": [
+        {
+          "title": "W3Schools - OOP",
+          "url": "https://www.w3schools.com/python/python_functions.asp",
+          "description": "",
+          "type": "documentation",
+          "id": "aab1c1c2-5cda-4c90-96f7-86c559fc706c"
+        },
+        {
+          "title": "GFG - Inheritance vs Composition",
+          "url": "https://www.geeksforgeeks.org/python/inheritance-and-composition-in-python/",
+          "description": "",
+          "type": "documentation",
+          "id": "e1537afb-c277-4af9-b059-4a70cef30d3d"
+        }
+      ],
       "github": [],
       "liveDemo": [],
       "related": [],
@@ -363,54 +289,72 @@
         "Python",
         "OOP"
       ],
-      "updatedAt": "2025-01-21T10:00:00Z",
+      "updatedAt": "2026-07-28T09:40:41.175Z",
       "position": {
         "x": 220,
-        "y": 200
+        "y": 300
       },
       "type": "topic",
-      "interviewNotes": [],
-      "revisionNotes": []
+      "interviewNotes": [
+        {
+          "id": "53b0bbc7-4529-4d26-b04e-abe0e0609bed",
+          "content": "Need to change behavior use Inheritance",
+          "createdAt": "2026-07-28T06:59:17.895Z"
+        },
+        {
+          "id": "e22a1e67-a9e3-430b-9bd1-5baff6faacda",
+          "content": "Need to use class without any change use Composition",
+          "createdAt": "2026-07-28T07:00:02.947Z"
+        },
+        {
+          "id": "73d2736b-213a-4997-be58-db0fd9cc00bc",
+          "content": "Inheritance - IS A | Composition - HAS A",
+          "createdAt": "2026-07-28T07:00:32.349Z"
+        }
+      ],
+      "revisionNotes": [],
+      "progress": 100
     },
     {
       "id": "python-async",
-      "title": "AsyncIO",
+      "title": "Error handling",
       "category": "python",
-      "status": "not_started",
-      "description": "Asynchronous programming with async/await",
+      "status": "completed",
+      "description": "Built-in exceptions, Custom exceptions, Try\nexcept-finally, Logging module & levels,",
       "difficulty": 4,
-      "confidence": 1,
-      "estimatedHours": 8,
-      "keyLearnings": [],
+      "confidence": 4,
+      "estimatedHours": 3,
+      "keyLearnings": [
+        "Logging Types",
+        "StreamHandler, FileHandler and RotatingFileHandler",
+        "Exceptions"
+      ],
       "notes": [],
       "practice": [],
-      "resources": [
-        {
-          "id": "r5",
-          "title": "AsyncIO Documentation",
-          "url": "https://docs.python.org/3/library/asyncio.html",
-          "description": "Official docs",
-          "type": "documentation"
-        }
-      ],
+      "resources": [],
       "github": [],
       "liveDemo": [],
       "related": [],
-      "children": [],
+      "children": [
+        "1c7b7dfc-7eb4-492b-a6cb-9804cb3c1d0e",
+        "ee2d470b-8ee4-4d34-af0c-49c6cd4ded4e",
+        "5c397d86-0283-4b7a-9665-10e17386b38c"
+      ],
       "parentId": "python-root",
       "tags": [
         "Python",
         "Backend",
         "Async"
       ],
-      "updatedAt": "2025-01-15T10:00:00Z",
+      "updatedAt": "2026-07-28T09:40:30.767Z",
       "position": {
         "x": 220,
-        "y": 300
+        "y": 500
       },
       "type": "topic",
       "interviewNotes": [],
-      "revisionNotes": []
+      "revisionNotes": [],
+      "progress": 100
     },
     {
       "id": "project-rag",
@@ -462,8 +406,8 @@
       ],
       "updatedAt": "2025-03-20T10:00:00Z",
       "position": {
-        "x": 880,
-        "y": 700
+        "x": 0,
+        "y": 1200
       },
       "architecture": "Frontend (React) → API (FastAPI) → Vector DB (ChromaDB) → LLM (OpenAI)",
       "techStack": [
@@ -489,6 +433,519 @@
       "type": "project",
       "interviewNotes": [],
       "revisionNotes": []
+    },
+    {
+      "id": "cc9ad319-8d0f-48e3-b12a-8fca874d5d70",
+      "title": "Others",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "Operators, Loops, Conditionals, Tuples, List / Dict / Set comprehensions, String manipulations",
+      "difficulty": 3,
+      "confidence": 4,
+      "estimatedHours": 4,
+      "keyLearnings": [
+        "Basic coding syntax and usage"
+      ],
+      "notes": [],
+      "practice": [],
+      "resources": [],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [
+        {
+          "id": "43bf7fd8-e671-4e6c-80b6-262280227622",
+          "content": "Every String modified means new one is created.",
+          "createdAt": "2026-07-28T06:18:03.424Z"
+        }
+      ],
+      "related": [],
+      "children": [],
+      "parentId": "python-basics",
+      "tags": [
+        "String",
+        "Data Store",
+        "Loops and Condition"
+      ],
+      "updatedAt": "2026-07-28T09:38:50.830Z",
+      "position": {
+        "x": 440,
+        "y": 200
+      },
+      "progress": 100
+    },
+    {
+      "id": "41a1fd95-71fb-4341-96a8-2ef7fbf1a322",
+      "title": "Advanced Concepts",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "Mutable vs Immutable, Memory references, Shallow vs Deep copy, id(), Garbage collection, Packages and Modules",
+      "difficulty": 3,
+      "confidence": 4,
+      "estimatedHours": 4,
+      "keyLearnings": [
+        "Immutable types cannot be altered once created. Any “change” results in a new object with a different identity. Numbers (int, float, complex)  Strings (str)  Tuples (tuple)  Booleans (bool)  Bytes (bytes)  Frozen sets (frozenset)",
+        "Mutable types can be modified in place without changing their identity. Lists (list)  Dictionaries (dict)  Sets (set)  Byte arrays (bytearray)  Custom classes (by default)"
+      ],
+      "notes": [
+        {
+          "id": "b6833fc3-938d-4d52-815e-659dad35935a",
+          "content": "When refcount becomes zero, the object’s memory is immediately freed.",
+          "createdAt": "2026-07-28T06:35:57.652Z"
+        },
+        {
+          "id": "e2d1a391-1835-4dac-8cea-9f47592dc0e8",
+          "content": "Every object had Id can be taken seen id(object)",
+          "createdAt": "2026-07-28T06:37:05.930Z"
+        }
+      ],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Memory References",
+          "url": "https://www.bing.com/ck/a?!&&p=645ef3a3ee9bc5be774705dde49ca01efc0c836367f73b591bc6f91e6612513cJmltdHM9MTc4NTExMDQwMA&ptn=3&ver=2&hsh=4&fclid=2fdafe5c-c9e4-68dc-1a6b-e9c2c8cd69c6&psq=memory+references+in+python&u=a1aHR0cHM6Ly93d3cuZ2Vla3Nmb3JnZWVrcy5vcmcvcHl0aG9uL21lbW9yeS1tYW5hZ2VtZW50LWluLXB5dGhvbi8",
+          "description": "",
+          "type": "documentation",
+          "id": "c1c89809-abfd-45c3-8327-f5360038352e"
+        },
+        {
+          "title": "Mutable vs Immutable",
+          "url": "https://www.geeksforgeeks.org/python/mutable-vs-immutable-objects-in-python/",
+          "description": "",
+          "type": "documentation",
+          "id": "99993c69-8d6d-46c7-95f1-7fd77818841c"
+        },
+        {
+          "title": "Python Doc - Shallow and Deep",
+          "url": "https://docs.python.org/3/library/copy.html",
+          "description": "",
+          "type": "documentation",
+          "id": "0bb95c7a-9211-40e5-8ead-2ea737747d77"
+        },
+        {
+          "title": "Realpython - Modules and Packages",
+          "url": "https://realpython.com/python-modules-packages/",
+          "description": "",
+          "type": "documentation",
+          "id": "7764afea-b909-4980-83f2-b0bd715b0a3a"
+        },
+        {
+          "title": "GFG - Garbage",
+          "url": "https://www.geeksforgeeks.org/python/garbage-collection-python/",
+          "description": "",
+          "type": "documentation",
+          "id": "59a12147-100e-45cd-b96f-7ab72e18b54c"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [
+        {
+          "id": "9821c417-fc5d-4a2d-bd34-7b93f4f4c4d8",
+          "content": "Shallow means Reference, Deep means separate copy",
+          "createdAt": "2026-07-28T06:41:48.002Z"
+        }
+      ],
+      "revisionNotes": [
+        {
+          "id": "ba371814-17fb-4970-8c5a-f27dc6a57a3b",
+          "content": "One file with some function is Module. Collection of Modules is a Package",
+          "createdAt": "2026-07-28T06:34:09.444Z"
+        }
+      ],
+      "related": [],
+      "children": [],
+      "parentId": "python-root",
+      "tags": [
+        "Internal",
+        "References"
+      ],
+      "updatedAt": "2026-07-28T09:40:43.938Z",
+      "position": {
+        "x": 220,
+        "y": 700
+      }
+    },
+    {
+      "id": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "title": "Functional Python",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "Iterable vs Iterator, Lambda functions, map/filter/reduce, Closures, Decorators",
+      "difficulty": 4,
+      "confidence": 4,
+      "estimatedHours": 5,
+      "keyLearnings": [],
+      "notes": [],
+      "practice": [],
+      "resources": [],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "related": [],
+      "children": [
+        "ad410363-a117-4911-a8fd-564e2a001282",
+        "f198a49b-7552-47a2-ac0d-b8794e652045",
+        "3edf44cd-e608-4906-9f89-5c2a8718bcda",
+        "6e044d84-3ac6-4be5-bc4f-5152bc121c3e"
+      ],
+      "parentId": "python-root",
+      "tags": [
+        "Lamda",
+        "Fuctional"
+      ],
+      "updatedAt": "2026-07-28T09:39:03.195Z",
+      "position": {
+        "x": 220,
+        "y": 950
+      },
+      "progress": 100
+    },
+    {
+      "id": "ad410363-a117-4911-a8fd-564e2a001282",
+      "title": "Iterator",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "Iterator vs Iterable",
+      "difficulty": 4,
+      "confidence": 4,
+      "estimatedHours": 1.5,
+      "keyLearnings": [
+        "Iterable is an object, that one can iterate over. It generates an Iterator when passed to iter() method",
+        "An iterator is an object, which is used to iterate over an iterable object using the __next__() method"
+      ],
+      "notes": [
+        {
+          "id": "5220617e-3e2d-4960-a54e-7c6c0cb77aa1",
+          "content": "Every iterator is also an iterable, but not every iterable is an iterator in Python.",
+          "createdAt": "2026-07-28T09:20:51.636Z"
+        }
+      ],
+      "practice": [],
+      "resources": [],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "related": [],
+      "children": [],
+      "parentId": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "tags": [],
+      "updatedAt": "2026-07-28T09:39:12.605Z",
+      "position": {
+        "x": 440,
+        "y": 800
+      },
+      "progress": 100
+    },
+    {
+      "id": "f198a49b-7552-47a2-ac0d-b8794e652045",
+      "title": "Lamda",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "Lamda Functions, Map / Filter / Reduce",
+      "difficulty": 5,
+      "confidence": 3,
+      "estimatedHours": 3,
+      "keyLearnings": [
+        "These functions enable efficient data transformation and processing by applying operations to entire iterables (like lists or tuples) without using explicit loops.",
+        "map(fun, iter)",
+        "reduce(func, iterable[, initial])",
+        "filter(function, sequence)"
+      ],
+      "notes": [
+        {
+          "id": "9214960d-2c49-4d55-bd85-3c03aa93bda8",
+          "content": "Only one expression",
+          "createdAt": "2026-07-28T09:24:13.001Z"
+        }
+      ],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Lamda",
+          "url": "https://www.geeksforgeeks.org/python/python-lambda-anonymous-functions-filter-map-reduce/",
+          "description": "",
+          "type": "documentation",
+          "id": "6f8eb2f0-3333-4f05-ae06-f5ebaefd01fa"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [
+        {
+          "id": "08dfda2b-8636-489d-bcfd-4be8b880ca92",
+          "content": "Function_name = Lamda Argument : Expressions",
+          "createdAt": "2026-07-28T09:25:34.084Z"
+        }
+      ],
+      "related": [],
+      "children": [],
+      "parentId": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "tags": [
+        "Lamda",
+        "Map",
+        "Reduce",
+        "Filter"
+      ],
+      "updatedAt": "2026-07-28T09:39:09.196Z",
+      "position": {
+        "x": 440,
+        "y": 900
+      },
+      "progress": 100
+    },
+    {
+      "id": "3edf44cd-e608-4906-9f89-5c2a8718bcda",
+      "title": "Closure",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "Closures",
+      "difficulty": 4,
+      "confidence": 4,
+      "estimatedHours": 1,
+      "keyLearnings": [
+        "“memory-equipped” functions."
+      ],
+      "notes": [
+        {
+          "id": "b591cf51-ecf2-4903-a1aa-ac3c9f26cfa4",
+          "content": "A function is defined inside another function (nested function). The inner function references variables from the outer function. The outer function returns the inner function.",
+          "createdAt": "2026-07-28T09:18:45.469Z"
+        }
+      ],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Closures",
+          "url": "https://www.geeksforgeeks.org/python/python-closures/",
+          "description": "",
+          "type": "documentation",
+          "id": "37570826-02ee-4d9d-8485-c615a735ed17"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "related": [],
+      "children": [],
+      "parentId": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "tags": [],
+      "updatedAt": "2026-07-28T09:39:06.844Z",
+      "position": {
+        "x": 440,
+        "y": 1000
+      },
+      "progress": 100
+    },
+    {
+      "id": "6e044d84-3ac6-4be5-bc4f-5152bc121c3e",
+      "title": "Decorators",
+      "category": "python",
+      "type": "topic",
+      "status": "revision",
+      "description": "flexible way to modify or extend behavior of functions or methods, without changing their actual code",
+      "difficulty": 4,
+      "confidence": 3,
+      "estimatedHours": 1,
+      "keyLearnings": [
+        "@decorator_name before function in which required to apply"
+      ],
+      "notes": [
+        {
+          "id": "5f1a4d6d-a24c-4740-841a-c485a5b41565",
+          "content": "wrapper(*args, **kwargs) nested function that wraps func. *args collects positional arguments, **kwargs collects keyword arguments,",
+          "createdAt": "2026-07-28T09:30:59.222Z"
+        }
+      ],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Decorators",
+          "url": "https://www.geeksforgeeks.org/python/decorators-in-python/",
+          "description": "",
+          "type": "documentation",
+          "id": "d11a0a2a-adeb-4ac6-9951-33efef19ddd9"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [
+        {
+          "id": "f89f12de-fee4-4ad2-a02b-496d3c59cad4",
+          "content": "Logging: Track function calls (e.g., @logger). Authentication: Restrict access in web apps. Rate Limiting: Control API usage per user. Caching: Store results using functools.lru_cache. Retry Logic: Automatically retry failed network calls.",
+          "createdAt": "2026-07-28T09:36:56.196Z"
+        }
+      ],
+      "revisionNotes": [
+        {
+          "id": "2d00556f-07b5-478b-b762-8824a5af753b",
+          "content": "@decorator_name equivalent to writing add = decorator_name(add)",
+          "createdAt": "2026-07-28T09:31:28.674Z"
+        },
+        {
+          "id": "f99a1d9c-bf4d-4430-9ba8-2269bae01630",
+          "content": "Built-in Decorators @staticmethod @classmethod @property",
+          "createdAt": "2026-07-28T09:35:02.927Z"
+        }
+      ],
+      "related": [],
+      "children": [],
+      "parentId": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "tags": [],
+      "updatedAt": "2026-07-28T09:39:04.994Z",
+      "position": {
+        "x": 440,
+        "y": 1100
+      },
+      "progress": 100
+    },
+    {
+      "id": "1c7b7dfc-7eb4-492b-a6cb-9804cb3c1d0e",
+      "title": "Exceptions",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "handle unexpected errors during execution in a controlled way, instead of crashing abruptly.",
+      "difficulty": 4,
+      "confidence": 4,
+      "estimatedHours": 2,
+      "keyLearnings": [
+        "We can choose from built-in exceptions or define our own custom exceptions by inheriting from Python's built-in Exception class."
+      ],
+      "notes": [],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Exception Handling",
+          "url": "https://www.geeksforgeeks.org/python/python-exception-handling/",
+          "description": "",
+          "type": "documentation",
+          "id": "8fc1fc33-189b-40ec-af84-8bca57e58d8e"
+        },
+        {
+          "title": "W3Schools - Built-in Exceptions",
+          "url": "https://www.w3schools.com/python/python_ref_exceptions.asp",
+          "description": "",
+          "type": "documentation",
+          "id": "ca54a5a6-0ce1-49a6-8a86-5abb58120949"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "related": [],
+      "children": [],
+      "parentId": "python-async",
+      "tags": [
+        "Exceptions"
+      ],
+      "updatedAt": "2026-07-28T09:41:10.616Z",
+      "position": {
+        "x": 739.0100713853309,
+        "y": 416.71484871098113
+      },
+      "progress": 100
+    },
+    {
+      "id": "ee2d470b-8ee4-4d34-af0c-49c6cd4ded4e",
+      "title": "Try, Except and Finally",
+      "category": "python",
+      "type": "topic",
+      "status": "completed",
+      "description": "The try block contains code that may raise an exception, except handles the error, and finally executes always, regardless of whether an exception occurred.",
+      "difficulty": 3,
+      "confidence": 4,
+      "estimatedHours": 1,
+      "keyLearnings": [
+        "used for exception handling and resource cleanup"
+      ],
+      "notes": [],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Try, Except and Finally",
+          "url": "https://www.geeksforgeeks.org/python/try-except-else-and-finally-in-python/",
+          "description": "",
+          "type": "documentation",
+          "id": "1110c5c7-1f72-4791-b69c-2e16454189bc"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [],
+      "related": [],
+      "children": [],
+      "parentId": "python-async",
+      "tags": [],
+      "updatedAt": "2026-07-28T09:41:04.728Z",
+      "position": {
+        "x": 440,
+        "y": 345.8519507765065
+      },
+      "progress": 100
+    },
+    {
+      "id": "5c397d86-0283-4b7a-9665-10e17386b38c",
+      "title": "Logging",
+      "category": "python",
+      "type": "topic",
+      "status": "revision",
+      "description": "keeping a record of what a program is doing while it runs",
+      "difficulty": 4,
+      "confidence": 3,
+      "estimatedHours": 2,
+      "keyLearnings": [],
+      "notes": [
+        {
+          "id": "06f0832a-6c01-4ab9-b8de-c39e6c540c31",
+          "content": "Debug: Detailed information for diagnosing problems. Info: Confirms things are working as expected. Warning: Indicates unexpected issues or potential future problems. Error: A serious problem that prevents a function from running. Critical: A severe error that may stop the program from running.",
+          "createdAt": "2026-07-28T09:14:34.321Z"
+        }
+      ],
+      "practice": [],
+      "resources": [
+        {
+          "title": "GFG - Logging",
+          "url": "https://www.geeksforgeeks.org/python/logging-in-python/",
+          "description": "",
+          "type": "documentation",
+          "id": "4341a604-8f00-4eb1-a9a5-3ff4f80e2e0d"
+        }
+      ],
+      "github": [],
+      "liveDemo": [],
+      "interviewNotes": [],
+      "revisionNotes": [
+        {
+          "id": "544402e9-d48c-431d-9a14-b8e8b03cd6a7",
+          "content": "StreamHandler  Sends messages to streams (file-like objects).  FileHandler  Sends messages to disk files.  RotatingFileHandler  Sends messages to disk files, with support for maximum log file sizes and log file rotation",
+          "createdAt": "2026-07-28T09:15:05.021Z"
+        }
+      ],
+      "related": [],
+      "children": [],
+      "parentId": "python-async",
+      "tags": [
+        "Telemetry"
+      ],
+      "updatedAt": "2026-07-28T09:41:12.891Z",
+      "position": {
+        "x": 1065.8782239556306,
+        "y": 540.5694268054
+      },
+      "progress": 92
     }
   ],
   "categories": [
@@ -527,6 +984,18 @@
       "type": "hierarchy"
     },
     {
+      "id": "python-root-41a1fd95-71fb-4341-96a8-2ef7fbf1a322",
+      "source": "python-root",
+      "target": "41a1fd95-71fb-4341-96a8-2ef7fbf1a322",
+      "type": "hierarchy"
+    },
+    {
+      "id": "python-root-0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "source": "python-root",
+      "target": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "type": "hierarchy"
+    },
+    {
       "id": "python-basics-python-variables",
       "source": "python-basics",
       "target": "python-variables",
@@ -539,18 +1008,67 @@
       "type": "hierarchy"
     },
     {
-      "id": "python-functions-python-decorators",
-      "source": "python-functions",
-      "target": "python-decorators",
+      "id": "python-basics-cc9ad319-8d0f-48e3-b12a-8fca874d5d70",
+      "source": "python-basics",
+      "target": "cc9ad319-8d0f-48e3-b12a-8fca874d5d70",
       "type": "hierarchy"
     },
     {
-      "id": "python-decorators-python-context-managers",
-      "source": "python-decorators",
-      "target": "python-context-managers",
+      "id": "python-async-1c7b7dfc-7eb4-492b-a6cb-9804cb3c1d0e",
+      "source": "python-async",
+      "target": "1c7b7dfc-7eb4-492b-a6cb-9804cb3c1d0e",
+      "type": "hierarchy"
+    },
+    {
+      "id": "python-async-ee2d470b-8ee4-4d34-af0c-49c6cd4ded4e",
+      "source": "python-async",
+      "target": "ee2d470b-8ee4-4d34-af0c-49c6cd4ded4e",
+      "type": "hierarchy"
+    },
+    {
+      "id": "python-async-5c397d86-0283-4b7a-9665-10e17386b38c",
+      "source": "python-async",
+      "target": "5c397d86-0283-4b7a-9665-10e17386b38c",
+      "type": "hierarchy"
+    },
+    {
+      "id": "0214c434-49a5-4259-a77a-fb3d1c01feec-ad410363-a117-4911-a8fd-564e2a001282",
+      "source": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "target": "ad410363-a117-4911-a8fd-564e2a001282",
+      "type": "hierarchy"
+    },
+    {
+      "id": "0214c434-49a5-4259-a77a-fb3d1c01feec-f198a49b-7552-47a2-ac0d-b8794e652045",
+      "source": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "target": "f198a49b-7552-47a2-ac0d-b8794e652045",
+      "type": "hierarchy"
+    },
+    {
+      "id": "0214c434-49a5-4259-a77a-fb3d1c01feec-3edf44cd-e608-4906-9f89-5c2a8718bcda",
+      "source": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "target": "3edf44cd-e608-4906-9f89-5c2a8718bcda",
+      "type": "hierarchy"
+    },
+    {
+      "id": "0214c434-49a5-4259-a77a-fb3d1c01feec-6e044d84-3ac6-4be5-bc4f-5152bc121c3e",
+      "source": "0214c434-49a5-4259-a77a-fb3d1c01feec",
+      "target": "6e044d84-3ac6-4be5-bc4f-5152bc121c3e",
       "type": "hierarchy"
     }
   ],
-  "customEdges": [],
-  "exportedAt": "2026-07-27T08:39:03.557Z"
+  "customEdges": [
+    {
+      "id": "custom-56f2e1d6-9d27-479d-beea-24d246bcba07",
+      "source": "ee2d470b-8ee4-4d34-af0c-49c6cd4ded4e",
+      "target": "1c7b7dfc-7eb4-492b-a6cb-9804cb3c1d0e",
+      "type": "custom"
+    },
+    {
+      "id": "custom-8cc6982b-4c70-42f1-8a86-57f1dfc23198",
+      "source": "1c7b7dfc-7eb4-492b-a6cb-9804cb3c1d0e",
+      "target": "5c397d86-0283-4b7a-9665-10e17386b38c",
+      "type": "custom"
+    }
+  ],
+  "exportedAt": "2026-07-28T09:41:36.692Z"
 }
